@@ -3,6 +3,8 @@ const jobRoleMenu = document.getElementById(`title`);
 const otherJobRole = document.getElementById(`other-job-role`);
 const shirtDesign = document.getElementById(`design`);
 const shirtColor = document.getElementById(`color`);
+const activities  = document.getElementById(`activities`);
+let activitiesCost = document.getElementById(`activities-cost`);
 
 nameInput.focus();
 
@@ -36,6 +38,20 @@ shirtDesign.addEventListener(`change`, (e)=>{
       colorOption.style.display = `none`;
     }
   }
+});
+
+let totalCost = 0;
+
+// Updates the total cost text in the "Register for Activities" section 
+// as the user checks and unchecks activities.
+activities.addEventListener(`change`, (e)=>{
+  const dataCost = +e.target.getAttribute(`data-cost`);
+  if (e.target.checked){
+    totalCost += dataCost;
+  } else {
+    totalCost -= dataCost;
+  }
+  activitiesCost.textContent = `Total: $${totalCost}`;
 });
 
 
