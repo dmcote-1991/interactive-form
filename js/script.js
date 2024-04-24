@@ -20,3 +20,22 @@ jobRoleMenu.addEventListener(`change`, (e)=>{
   }
 });
 
+shirtColor.disabled = true;
+
+// Enables the "Color" menu once a theme is selected. 
+// The color options are displayed/hidden based on which theme the user has selected.
+shirtDesign.addEventListener(`change`, (e)=>{
+  const selectedTheme = e.target.value;
+  shirtColor.disabled = false;
+  for (let i=0; i<shirtColor.children.length; i++){
+    const colorOption = shirtColor.children[i];
+    const dataTheme = colorOption.getAttribute(`data-theme`);
+    if (dataTheme === selectedTheme) {
+      colorOption.style.display = `block`;
+    } else {
+      colorOption.style.display = `none`;
+    }
+  }
+});
+
+
