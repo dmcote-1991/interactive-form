@@ -1,11 +1,26 @@
-////////  "Basic Info" Section ////////
 const nameInput = document.getElementById(`name`);
 const jobRoleMenu = document.getElementById(`title`);
 const otherJobRole = document.getElementById(`other-job-role`);
+const shirtDesign = document.getElementById(`design`);
+const shirtColor = document.getElementById(`color`);
+const activities  = document.getElementById(`activities`);
+const activitiesCheckboxes = document.querySelectorAll(`#activities input[type="checkbox"]`);
+const payment = document.getElementById(`payment`);
+const creditCard = document.getElementById(`credit-card`);
+const paypal = document.getElementById(`paypal`);
+const bitcoin = document.getElementById(`bitcoin`);
+const form = document.querySelector(`form`)
+const email = document.getElementById(`email`);
+const cardNumber = document.getElementById(`cc-num`);
+const zipCode = document.getElementById(`zip`);
+const cvv = document.getElementById(`cvv`);
 
+let totalCost = 0;
+
+//////// "Basic Info" and "T-shirt Info" sections ////////
 nameInput.focus();
-
 otherJobRole.style.display = `none`;
+shirtColor.disabled = true;
 
 // Displays the "Other Job Role" field only when the user selects the "Other" option in the "Job Role" menu.
 // If the user selects another option, after having selected the "Other" option,
@@ -18,12 +33,6 @@ jobRoleMenu.addEventListener(`change`, (e)=>{
     otherJobRole.style.display = `none`;
   }
 });
-
-//////// "T-Shirt Info" section ////////
-const shirtDesign = document.getElementById(`design`);
-const shirtColor = document.getElementById(`color`);
-
-shirtColor.disabled = true;
 
 // Enables the "Color" menu once a theme is selected. 
 // The color options are displayed/hidden based on which theme the user has selected.
@@ -42,10 +51,6 @@ shirtDesign.addEventListener(`change`, (e)=> {
 });
 
 //////// "Register for Activities" section ////////
-const activities  = document.getElementById(`activities`);
-const activitiesCheckboxes = document.querySelectorAll(`#activities input[type="checkbox"]`);
-let totalCost = 0;
-
 // Updates the total cost text as the user checks and unchecks activities.
 activities.addEventListener(`change`, (e)=> {
   const dataCost = +e.target.getAttribute(`data-cost`);
@@ -69,11 +74,6 @@ for (let i=0; i<activitiesCheckboxes.length; i++){
 }
 
 //////// "Payment Info" section ////////
-const payment = document.getElementById(`payment`);
-const creditCard = document.getElementById(`credit-card`);
-const paypal = document.getElementById(`paypal`);
-const bitcoin = document.getElementById(`bitcoin`);
-
 payment.children[1].setAttribute(`selected`, `selected`);
 paypal.style.display = `none`;
 bitcoin.style.display = `none`;
@@ -88,30 +88,6 @@ payment.addEventListener(`change`, (e)=> {
 });
 
 //////// Form Validation ////////
-// const nameInput = document.getElementById(`name`);  -- (DECLARED ABOVE)
-const email = document.getElementById(`email`);
-// const activities  = document.getElementById(`activities`); -- (DECLARED ABOVE)
-const cardNumber = document.getElementById(`cc-num`);
-const zipCode = document.getElementById(`zip`);
-const cvv = document.getElementById(`cvv`);
-
-const form = document.querySelector(`form`);
-
-function validate(validationVariable) {
-  if (validationVariable === false) {
-    return validationVariable;
-  } 
-}
-
-function ccValidate(ccValidationVariable) {
-  if (creditCard.style.display === `block`) {
-    if (ccValidationVariable === false) {
-    return ccValidationVariable;
-    } 
-  }
-  return true;
-}
-
 form.addEventListener(`submit`, (e)=> {
   const nameInputValue = nameInput.value;
   const nameRegex = /^.+$/.test(nameInputValue);
@@ -124,11 +100,11 @@ form.addEventListener(`submit`, (e)=> {
     if (activitiesCheckboxes[i].checked) {
       activitiesValue = activities.value = true;
       break;
-    } else {
+     } else {
       activitiesValue = activities.value = false;
     }
   }
-
+  
   const cardNumberValue = cardNumber.value;
   const cardNumberRegex = /^\d{13,16}$/.test(cardNumberValue);
 
@@ -138,8 +114,25 @@ form.addEventListener(`submit`, (e)=> {
   const cvvValue = cvv.value;
   const cvvRegex = /^\d{3}$/.test(cvvValue);
 
+  function validate(validationVariable) {
+    if (payment.value === creditCard) {
+      if (validationVariable === false) {
+        e.preventDefault();
+        return false;
+      }
+    if (validationVariable === false) {
+      e.preventDefault();
+      return false;
+    } 
+    return true;
+    }
+  }
+  
+  // When the conditional statement is finalBoolean === false, the form always submits.
+  // When the conditional statement is finalBoolean !== true, the form never submits.
+  // When the conditional statement is !finalBoolean, the form never submits.
   const finalBoolean = validate(nameRegex) && validate(emailRegex) && validate(activitiesValue) && ccValidate(cardNumberRegex) && ccValidate(zipCodeRegex) && ccValidate(cvvRegex);
-  if (finalBoolean === false) {
+  if (!finalBoolean) {
     e.preventDefault();
   }
 });
