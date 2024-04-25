@@ -3,7 +3,7 @@ const jobRoleMenu = document.getElementById(`title`);
 const otherJobRole = document.getElementById(`other-job-role`);
 const shirtDesign = document.getElementById(`design`);
 const shirtColor = document.getElementById(`color`);
-const activities  = document.getElementById(`activities`);
+const activities  = document.getElementById(`activities-box`);
 const activitiesCheckboxes = document.querySelectorAll(`#activities input[type="checkbox"]`);
 const payment = document.getElementById(`payment`);
 const creditCard = document.getElementById(`credit-card`);
@@ -105,32 +105,92 @@ function validateActivities() {
   return false;
 }
 
-function validateCreditCard(cardNumber, zipCode, cvv) {
+function validateCardNumber(cardNumber) {
   const cardNumberRegex = /^\d{13,16}$/.test(cardNumber);
+  return cardNumberRegex;
+}
+
+function validateZipCode(zipCode) {
   const zipCodeRegex = /^\d{5}$/.test(zipCode);
+  return zipCodeRegex;
+}
+
+function validateCvv(cvv) {
   const cvvRegex = /^\d{3}$/.test(cvv);
-  return cardNumberRegex && zipCodeRegex && cvvRegex;
+  return cvvRegex;
 }
 
 form.addEventListener('submit', (e) => {
   if (!validateName(nameInput.value)) {
     e.preventDefault();
+    nameInput.parentElement.classList.add(`not-valid`);
+    nameInput.parentElement.classList.remove(`valid`);
+    nameInput.parentElement.lastElementChild.style.display = `block`;
+  } else {
+    nameInput.parentElement.classList.add(`valid`);
+    nameInput.parentElement.classList.remove(`not-valid`);
+    nameInput.parentElement.lastElementChild.style.display = `none`;
   }
 
   if (!validateEmail(email.value)) {
     e.preventDefault();
+    email.parentElement.classList.add(`not-valid`);
+    email.parentElement.classList.remove(`valid`);
+    email.parentElement.lastElementChild.style.display = `block`;
+  } else {
+    email.parentElement.classList.add(`valid`);
+    email.parentElement.classList.remove(`not-valid`);
+    email.parentElement.lastElementChild.style.display = `none`;
   }
 
   if (!validateActivities()) {
     e.preventDefault();
+    activities.parentElement.classList.add(`not-valid`);
+    activities.parentElement.classList.remove(`valid`);
+    activities.parentElement.lastElementChild.style.display = `block`;
+  } else {
+    activities.parentElement.classList.add(`valid`);
+    activities.parentElement.classList.remove(`not-valid`);
+    activities.parentElement.lastElementChild.style.display = `none`;
   }
 
   if (payment.value === 'credit-card') {
-    if (!validateCreditCard(cardNumber.value, zipCode.value, cvv.value)) {
+    if (!validateCardNumber(cardNumber.value)) {
       e.preventDefault();
+      cardNumber.parentElement.classList.add(`not-valid`);
+      cardNumber.parentElement.classList.remove(`valid`);
+      cardNumber.parentElement.lastElementChild.style.display = `block`;
+    } else {
+      cardNumber.parentElement.classList.add(`valid`);
+      cardNumber.parentElement.classList.remove(`not-valid`);
+      cardNumber.parentElement.lastElementChild.style.display = `none`;
+    }
+  }
+
+  if (payment.value === 'credit-card') {
+    if (!validateZipCode(zipCode.value)) {
+      e.preventDefault();
+      zipCode.parentElement.classList.add(`not-valid`);
+      zipCode.parentElement.classList.remove(`valid`);
+      zipCode.parentElement.lastElementChild.style.display = `block`;
+    } else {
+      zipCode.parentElement.classList.add(`valid`);
+      zipCode.parentElement.classList.remove(`not-valid`);
+      zipCode.parentElement.lastElementChild.style.display = `none`;
+    }
+  }
+
+  if (payment.value === 'credit-card') {
+    if (!validateCvv(cvv.value)) {
+      e.preventDefault();
+      cvv.parentElement.classList.add(`not-valid`);
+      cvv.parentElement.classList.remove(`valid`);
+      cvv.parentElement.lastElementChild.style.display = `block`;
+    } else {
+      cvv.parentElement.classList.add(`valid`);
+      cvv.parentElement.classList.remove(`not-valid`);
+      cvv.parentElement.lastElementChild.style.display = `none`;
     }
   }
 });
   
-
-
