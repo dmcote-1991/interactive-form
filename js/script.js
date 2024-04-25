@@ -43,6 +43,7 @@ shirtDesign.addEventListener(`change`, (e)=> {
 
 //////// "Register for Activities" section ////////
 const activities  = document.getElementById(`activities`);
+const activitiesCheckboxes = document.querySelectorAll(`#activities input[type="checkbox"]`);
 let totalCost = 0;
 
 // Updates the total cost text as the user checks and unchecks activities.
@@ -56,6 +57,8 @@ activities.addEventListener(`change`, (e)=> {
   }
   activitiesCost.textContent = `Total: $${totalCost}`;
 });
+
+
 
 //////// "Payment Info" section ////////
 const payment = document.getElementById(`payment`);
@@ -74,5 +77,66 @@ payment.addEventListener(`change`, (e)=> {
   bitcoin.style.display = `none`;
   const selectedPayment = document.getElementById(e.target.value);
   selectedPayment.style.display = `block`;
+});
+
+//////// Form Validation ////////
+// const nameInput = document.getElementById(`name`);  -- (DECLARED ABOVE)
+const email = document.getElementById(`email`);
+// const activities  = document.getElementById(`activities`); -- (DECLARED ABOVE)
+const cardNumber = document.getElementById(`cc-num`);
+const zipCode = document.getElementById(`zip`);
+const cvv = document.getElementById(`cvv`);
+
+const form = document.querySelector(`form`);
+
+function validate(validationVariable) {
+  if (validationVariable === false) {
+    e.preventDefault();
+    return validationVariable;
+  }
+}
+
+function ccValidate(ccValidationVariable) {
+  if (creditCard.style.display === `block`) {
+    if (ccValidationVariable === false) {
+      e.preventDefault();
+      return ccValidationVariable;
+    }
+  }
+}
+
+form.addEventListener(`submit`, (e)=> {
+  const nameInputValue = nameInput.value;
+  const nameRegex = /^.+$/.test(nameInputValue);
+
+  const emailValue = email.value;
+  const emailRegex = /^\w+@\w+\.\w+$/.test(emailValue);
+
+  let activitiesValue = activities.setAttribute(`value`, `false`);
+  for (let i=0; i<activitiesCheckboxes.length; i++){
+    if (activitiesCheckboxes[i].checked) {
+      activitiesValue = activities.value = true;
+      break;
+    } else {
+      activitiesValue = activities.value = false;
+    }
+  }
+
+  const cardNumberValue = cardNumber.value;
+  const cardNumberRegex = /^\d{13,16}$/.test(cardNumberValue);
+
+  const zipCodeValue = zipCode.value;
+  const zipCodeRegex = /^\d{5}$/.test(zipCodeValue);
+
+  const cvvValue = cvv.value;
+  const cvvRegex = /^\d{3}$/.test(cvvValue);
+
+  validate(nameRegex);
+  validate(emailRegex);
+  validate(activitiesValue);
+
+  ccValidate(cardNumberRegex);
+  ccValidate(zipCodeRegex);
+  ccValidate(cvvRegex);
 });
 
