@@ -88,52 +88,49 @@ payment.addEventListener(`change`, (e)=> {
 });
 
 //////// Form Validation ////////
-form.addEventListener(`submit`, (e)=> {
-  const nameInputValue = nameInput.value;
-  const nameRegex = /^.+$/.test(nameInputValue);
+function validateName(name) {
+  return /^.+$/.test(name);
+}
 
-  const emailValue = email.value;
-  const emailRegex = /^\w+@\w+\.\w+$/.test(emailValue);
+function validateEmail(email) {
+  return /^\w+@\w+\.\w+$/.test(email);
+}
 
-  let activitiesValue = activities.setAttribute(`value`, `false`);
-  for (let i=0; i<activitiesCheckboxes.length; i++){
+function validateActivities() {
+  for (let i = 0; i < activitiesCheckboxes.length; i++) {
     if (activitiesCheckboxes[i].checked) {
-      activitiesValue = activities.value = true;
-      break;
-     } else {
-      activitiesValue = activities.value = false;
+      return true;
     }
   }
-  
-  const cardNumberValue = cardNumber.value;
-  const cardNumberRegex = /^\d{13,16}$/.test(cardNumberValue);
+  return false;
+}
 
-  const zipCodeValue = zipCode.value;
-  const zipCodeRegex = /^\d{5}$/.test(zipCodeValue);
+function validateCreditCard(cardNumber, zipCode, cvv) {
+  const cardNumberRegex = /^\d{13,16}$/.test(cardNumber);
+  const zipCodeRegex = /^\d{5}$/.test(zipCode);
+  const cvvRegex = /^\d{3}$/.test(cvv);
+  return cardNumberRegex && zipCodeRegex && cvvRegex;
+}
 
-  const cvvValue = cvv.value;
-  const cvvRegex = /^\d{3}$/.test(cvvValue);
-
-  function validate(validationVariable) {
-    if (payment.value === creditCard) {
-      if (validationVariable === false) {
-        e.preventDefault();
-        return false;
-      }
-    if (validationVariable === false) {
-      e.preventDefault();
-      return false;
-    } 
-    return true;
-    }
-  }
-  
-  // When the conditional statement is finalBoolean === false, the form always submits.
-  // When the conditional statement is finalBoolean !== true, the form never submits.
-  // When the conditional statement is !finalBoolean, the form never submits.
-  const finalBoolean = validate(nameRegex) && validate(emailRegex) && validate(activitiesValue) && ccValidate(cardNumberRegex) && ccValidate(zipCodeRegex) && ccValidate(cvvRegex);
-  if (!finalBoolean) {
+form.addEventListener('submit', (e) => {
+  if (!validateName(nameInput.value)) {
     e.preventDefault();
   }
+
+  if (!validateEmail(email.value)) {
+    e.preventDefault();
+  }
+
+  if (!validateActivities()) {
+    e.preventDefault();
+  }
+
+  if (payment.value === 'credit-card') {
+    if (!validateCreditCard(cardNumber.value, zipCode.value, cvv.value)) {
+      e.preventDefault();
+    }
+  }
 });
+  
+
 
