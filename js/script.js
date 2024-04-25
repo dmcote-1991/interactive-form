@@ -58,7 +58,7 @@ activities.addEventListener(`change`, (e)=> {
   activitiesCost.textContent = `Total: $${totalCost}`;
 });
 
-
+// Puts the "focus" class on the current activity in focus.
 for (let i=0; i<activitiesCheckboxes.length; i++){
   activitiesCheckboxes[i].addEventListener(`focus`, ()=> {
     activitiesCheckboxes[i].parentElement.classList.add(`focus`);
@@ -67,8 +67,6 @@ for (let i=0; i<activitiesCheckboxes.length; i++){
     activitiesCheckboxes[i].parentElement.classList.remove(`focus`);
   });
 }
-
-
 
 //////// "Payment Info" section ////////
 const payment = document.getElementById(`payment`);
@@ -101,18 +99,17 @@ const form = document.querySelector(`form`);
 
 function validate(validationVariable) {
   if (validationVariable === false) {
-    e.preventDefault();
     return validationVariable;
-  }
+  } 
 }
 
 function ccValidate(ccValidationVariable) {
   if (creditCard.style.display === `block`) {
     if (ccValidationVariable === false) {
-      e.preventDefault();
-      return ccValidationVariable;
-    }
+    return ccValidationVariable;
+    } 
   }
+  return true;
 }
 
 form.addEventListener(`submit`, (e)=> {
@@ -141,12 +138,9 @@ form.addEventListener(`submit`, (e)=> {
   const cvvValue = cvv.value;
   const cvvRegex = /^\d{3}$/.test(cvvValue);
 
-  validate(nameRegex);
-  validate(emailRegex);
-  validate(activitiesValue);
-
-  ccValidate(cardNumberRegex);
-  ccValidate(zipCodeRegex);
-  ccValidate(cvvRegex);
+  const finalBoolean = validate(nameRegex) && validate(emailRegex) && validate(activitiesValue) && ccValidate(cardNumberRegex) && ccValidate(zipCodeRegex) && ccValidate(cvvRegex);
+  if (finalBoolean === false) {
+    e.preventDefault();
+  }
 });
 
