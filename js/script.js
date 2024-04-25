@@ -59,6 +59,16 @@ activities.addEventListener(`change`, (e)=> {
 });
 
 
+for (let i=0; i<activitiesCheckboxes.length; i++){
+  activitiesCheckboxes[i].addEventListener(`focus`, ()=> {
+    activitiesCheckboxes[i].parentElement.classList.add(`focus`);
+  });
+  activitiesCheckboxes[i].addEventListener(`blur`, ()=> {
+    activitiesCheckboxes[i].parentElement.classList.remove(`focus`);
+  });
+}
+
+
 
 //////// "Payment Info" section ////////
 const payment = document.getElementById(`payment`);
