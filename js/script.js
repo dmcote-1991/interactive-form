@@ -14,6 +14,12 @@ const email = document.getElementById(`email`);
 const cardNumber = document.getElementById(`cc-num`);
 const zipCode = document.getElementById(`zip`);
 const cvv = document.getElementById(`cvv`);
+const nameHint = document.getElementById(`name-hint`);
+const emailHint = document.getElementById(`email-hint`);
+const activitiesHint = document.getElementById(`activities-hint`);
+const ccHint = document.getElementById(`cc-hint`);
+const zipHint = document.getElementById(`zip-hint`);
+const cvvHint = document.getElementById(`cvv-hint`);
 
 let totalCost = 0;
 
@@ -107,7 +113,7 @@ payment.addEventListener(`change`, (e)=> {
 
 //////// Form Validation ////////
 function validateName() {
-  return /^.+$/i.test(nameInput.value);
+  return /^(?!\s)[a-z\s]+$/i.test(nameInput.value);
 }
 function validateEmail() {
   return /^\w+@\w+\.\w+$/.test(email.value);
@@ -133,9 +139,22 @@ function validateCvv() {
   return cvvRegex;
 }
 
+
+//////////////// Attempt at making this code function without needing to submit first ////////////////>
+// function errorMessage(hint, errorText) {
+//   hint.textContent = errorText;
+// };
+// nameInput.addEventListener(`keyup`, ()=> {
+//   if (!validateName()) {
+//     errorMessage(nameHint, `Name field must be formatted correctly -- Ex: "John Smith"`);
+//   }
+// });
+////////////////<
+
+
 // Prevents the form from submitting if the input values do not match the regular expressions for the required fields.
 form.addEventListener('submit', (e) => {
-  const validator = (inputElement, validationFunction) => {
+  function validator(inputElement, validationFunction) {
     if (!validationFunction()) {
       e.preventDefault();
       inputElement.parentElement.classList.add(`not-valid`);
@@ -147,15 +166,40 @@ form.addEventListener('submit', (e) => {
       inputElement.parentElement.lastElementChild.style.display = `none`;
     }
   };
+  
+  // Provides conditional error messages
+  function errorMessage(hint, errorText) {
+    hint.textContent = errorText;
+  };
 
+  if (nameInput.value === ``) {
+    errorMessage(nameHint, `Name field cannot be blank`);
+  } else if (!validateName()) {
+    errorMessage(nameHint, `Name field must be formatted correctly -- Ex: "John Smith"`);
+  }
   validator(nameInput, validateName);
   nameInput.addEventListener('keyup', ()=> {
     validator(nameInput, validateName);
+    if (nameInput.value === ``) {
+      errorMessage(nameHint, `Name field cannot be blank`);
+    } else if (!validateName()) {
+      errorMessage(nameHint, `Name field must be formatted correctly -- Ex: "John Smith"`);
+    }
   });
 
+  if (email.value === ``) {
+    errorMessage(emailHint, `Email field cannot be blank`);
+  } else if (!validateName()) {
+    errorMessage(emailHint, `Email must be formatted correctly -- Ex: "johnsmith@example.com"`);
+  }
   validator(email, validateEmail);
   email.addEventListener('keyup', ()=> {
     validator(email, validateEmail);
+    if (email.value === ``) {
+      errorMessage(emailHint, `Email field cannot be blank`);
+    } else if (!validateName()) {
+      errorMessage(emailHint, `Email must be formatted correctly -- Ex: "johnsmith@example.com"`);
+    }
   });
 
   validator(activities, validateActivities);
@@ -180,7 +224,6 @@ form.addEventListener('submit', (e) => {
     });
   }
 });
-
 
 
 
