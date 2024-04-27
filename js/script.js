@@ -139,91 +139,85 @@ function validateCvv() {
   return cvvRegex;
 }
 
+// Provides conditional validation styles
+function validator(inputElement, validationFunction){
+  if (!validationFunction()) {
+    inputElement.parentElement.classList.add(`not-valid`);
+    inputElement.parentElement.classList.remove(`valid`);
+    inputElement.parentElement.lastElementChild.style.display = `block`;
+} else {
+    inputElement.parentElement.classList.add(`valid`);
+    inputElement.parentElement.classList.remove(`not-valid`);
+    inputElement.parentElement.lastElementChild.style.display = `none`;
+}
+}
 
-//////////////// Attempt at making this code function without needing to submit first ////////////////>
-// function errorMessage(hint, errorText) {
-//   hint.textContent = errorText;
-// };
-// nameInput.addEventListener(`keyup`, ()=> {
-//   if (!validateName()) {
-//     errorMessage(nameHint, `Name field must be formatted correctly -- Ex: "John Smith"`);
-//   }
-// });
-////////////////<
+// Provides conditional error messages
+function errorMessage(hint, errorText) {
+  hint.textContent = errorText;
+};
 
-
-// Prevents the form from submitting if the input values do not match the regular expressions for the required fields.
-form.addEventListener('submit', (e) => {
-  function validator(inputElement, validationFunction) {
-    if (!validationFunction()) {
-      e.preventDefault();
-      inputElement.parentElement.classList.add(`not-valid`);
-      inputElement.parentElement.classList.remove(`valid`);
-      inputElement.parentElement.lastElementChild.style.display = `block`;
-    } else {
-      inputElement.parentElement.classList.add(`valid`);
-      inputElement.parentElement.classList.remove(`not-valid`);
-      inputElement.parentElement.lastElementChild.style.display = `none`;
-    }
-  };
-  
-  // Provides conditional error messages
-  function errorMessage(hint, errorText) {
-    hint.textContent = errorText;
-  };
-
+nameInput.addEventListener(`keyup`, ()=> {
+  validator(nameInput, validateName);
   if (nameInput.value === ``) {
     errorMessage(nameHint, `Name field cannot be blank`);
   } else if (!validateName()) {
     errorMessage(nameHint, `Name field must be formatted correctly -- Ex: "John Smith"`);
   }
-  validator(nameInput, validateName);
-  nameInput.addEventListener('keyup', ()=> {
-    validator(nameInput, validateName);
-    if (nameInput.value === ``) {
-      errorMessage(nameHint, `Name field cannot be blank`);
-    } else if (!validateName()) {
-      errorMessage(nameHint, `Name field must be formatted correctly -- Ex: "John Smith"`);
-    }
-  });
+});
 
+email.addEventListener('keyup', ()=> {
+  validator(email, validateEmail);
   if (email.value === ``) {
     errorMessage(emailHint, `Email field cannot be blank`);
-  } else if (!validateName()) {
+  } else if (!validateEmail()) {
     errorMessage(emailHint, `Email must be formatted correctly -- Ex: "johnsmith@example.com"`);
-  }
-  validator(email, validateEmail);
-  email.addEventListener('keyup', ()=> {
-    validator(email, validateEmail);
-    if (email.value === ``) {
-      errorMessage(emailHint, `Email field cannot be blank`);
-    } else if (!validateName()) {
-      errorMessage(emailHint, `Email must be formatted correctly -- Ex: "johnsmith@example.com"`);
-    }
-  });
-
-  validator(activities, validateActivities);
-  activities.addEventListener('change', ()=> {
-    validator(activities, validateActivities);
-  });
-
-  if (payment.value === 'credit-card') {
-    validator(cardNumber, validateCardNumber);
-    cardNumber.addEventListener('keyup', ()=> {
-      validator(cardNumber, validateCardNumber);
-    });
-
-      validator(zipCode, validateZipCode);
-    zipCode.addEventListener('keyup', ()=> {
-      validator(zipCode, validateZipCode);
-    });
-    
-      validator(cvv, validateCvv);
-    cvv.addEventListener('keyup', ()=> {
-      validator(cvv, validateCvv);
-    });
   }
 });
 
-// Hey Ben
+activities.addEventListener('change', ()=> {
+  validator(activities, validateActivities);
+});
+
+if (payment.value === 'credit-card') {
+  cardNumber.addEventListener('keyup', ()=> {
+    validator(cardNumber, validateCardNumber);
+  });
+
+  zipCode.addEventListener('keyup', ()=> {
+    validator(zipCode, validateZipCode);
+  });
+
+  cvv.addEventListener('keyup', ()=> {
+    validator(cvv, validateCvv);
+  });
+}
+
+// Prevents the form from submitting if the input values do not match the regular expressions for the required fields.
+form.addEventListener('submit', (e) => {
+  function validator(inputElement, validationFunction){
+      if (!validationFunction()) {
+        e.preventDefault();
+        inputElement.parentElement.classList.add(`not-valid`);
+        inputElement.parentElement.classList.remove(`valid`);
+        inputElement.parentElement.lastElementChild.style.display = `block`;
+    } else {
+        inputElement.parentElement.classList.add(`valid`);
+        inputElement.parentElement.classList.remove(`not-valid`);
+        inputElement.parentElement.lastElementChild.style.display = `none`;
+    }
+  }
+
+  validator(nameInput, validateName);
+  validator(email, validateEmail);
+  validator(activities, validateActivities);
+
+  if (payment.value === 'credit-card') {
+    validator(cardNumber, validateCardNumber);
+    validator(zipCode, validateZipCode);
+    validator(cvv, validateCvv);
+  }
+});
+
+
 
