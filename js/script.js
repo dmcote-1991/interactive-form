@@ -40,6 +40,7 @@ jobRoleMenu.addEventListener(`change`, (e)=>{
   }
 });
 
+// Resets the color selector to "Select a color" when selecting a different option in the design selector. 
 function resetColorSelection() {
   const defaultOption = shirtColor.querySelector(`option[selected]`);
   defaultOption.textContent = `Select a color`;
