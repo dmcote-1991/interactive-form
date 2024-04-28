@@ -40,6 +40,11 @@ jobRoleMenu.addEventListener(`change`, (e)=>{
   }
 });
 
+function resetColorSelection() {
+  const defaultOption = shirtColor.querySelector(`option[selected]`);
+  defaultOption.textContent = `Select a color`;
+  shirtColor.value = defaultOption.value;
+}
 // Enables the "Color" menu once a theme is selected. 
 // The color options are displayed/hidden based on which theme the user has selected.
 shirtDesign.addEventListener(`change`, (e)=> {
@@ -54,6 +59,7 @@ shirtDesign.addEventListener(`change`, (e)=> {
       colorOption.style.display = `none`;
     }
   }
+  resetColorSelection();
 });
 
 //////// "Register for Activities" section ////////
