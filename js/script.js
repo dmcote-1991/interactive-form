@@ -119,12 +119,17 @@ payment.addEventListener(`change`, (e)=> {
 });
 
 //////// Form Validation ////////
+// Requires only letters and spaces with the first character being a space for the name field.
 function validateName() {
   return /^(?!\s)[a-z\s]+$/i.test(nameInput.value);
 }
+
+// Requires proper email format for the email address field.
 function validateEmail() {
   return /^\w+@\w+\.\w+$/.test(email.value);
 }
+
+// Requires at least one activity to be checked.
 function validateActivities() {
   for (let i = 0; i < activitiesCheckboxes.length; i++) {
     if (activitiesCheckboxes[i].checked) {
@@ -133,20 +138,26 @@ function validateActivities() {
   }
   return false;
 }
+
+// Requires 13 - 16 number characters for the card number field.
 function validateCardNumber() {
   const cardNumberRegex = /^\d{13,16}$/.test(cardNumber.value);
   return cardNumberRegex;
 }
+
+// Requires 5 number characters for the zip code field.
 function validateZipCode() {
   const zipCodeRegex = /^\d{5}$/.test(zipCode.value);
   return zipCodeRegex;
 }
+
+// Requires 3 number characters for the cvv field.
 function validateCvv() {
   const cvvRegex = /^\d{3}$/.test(cvv.value);
   return cvvRegex;
 }
 
-// Provides conditional validation styles
+// Provides conditional validation styles to show user whether their input matches the required format for the field.
 function validator(inputElement, validationFunction){
   if (!validationFunction()) {
     inputElement.parentElement.classList.add(`not-valid`);
@@ -159,11 +170,12 @@ function validator(inputElement, validationFunction){
 }
 }
 
-// Provides conditional error messages
+// Provides conditional error messages.
 function errorMessage(hint, errorText) {
   hint.textContent = errorText;
 };
 
+// Validates and provides conditional error messages to the the name field in real-time as the user types.
 nameInput.addEventListener(`keyup`, ()=> {
   validator(nameInput, validateName);
   if (nameInput.value === ``) {
@@ -173,6 +185,7 @@ nameInput.addEventListener(`keyup`, ()=> {
   }
 });
 
+// Validates and provides conditional error messages to the email address field in real-time as the user types.
 email.addEventListener('keyup', ()=> {
   validator(email, validateEmail);
   if (email.value === ``) {
@@ -182,19 +195,23 @@ email.addEventListener('keyup', ()=> {
   }
 });
 
+// Validates the activities section in real-time as the user checks/unchecks activities.
 activities.addEventListener('change', ()=> {
   validator(activities, validateActivities);
 });
 
+// Validates the card numeber field in real-time as the user types.
 if (payment.value === 'credit-card') {
   cardNumber.addEventListener('keyup', ()=> {
     validator(cardNumber, validateCardNumber);
   });
 
+  // Validates the zip code field in real-time as the user types.
   zipCode.addEventListener('keyup', ()=> {
     validator(zipCode, validateZipCode);
   });
 
+  // Validates the cvv field in real-time as the user types.
   cvv.addEventListener('keyup', ()=> {
     validator(cvv, validateCvv);
   });
