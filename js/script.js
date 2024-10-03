@@ -1,247 +1,229 @@
-const nameInput = document.getElementById(`name`);
-const jobRoleMenu = document.getElementById(`title`);
-const otherJobRole = document.getElementById(`other-job-role`);
-const shirtDesign = document.getElementById(`design`);
-const shirtColor = document.getElementById(`color`);
-const activities  = document.getElementById(`activities-box`);
-const activitiesCheckboxes = document.querySelectorAll(`#activities input[type="checkbox"]`);
-const payment = document.getElementById(`payment`);
-const creditCard = document.getElementById(`credit-card`);
-const paypal = document.getElementById(`paypal`);
-const bitcoin = document.getElementById(`bitcoin`);
-const form = document.querySelector(`form`)
-const email = document.getElementById(`email`);
-const cardNumber = document.getElementById(`cc-num`);
-const zipCode = document.getElementById(`zip`);
-const cvv = document.getElementById(`cvv`);
-const nameHint = document.getElementById(`name-hint`);
-const emailHint = document.getElementById(`email-hint`);
-const activitiesHint = document.getElementById(`activities-hint`);
-const ccHint = document.getElementById(`cc-hint`);
-const zipHint = document.getElementById(`zip-hint`);
-const cvvHint = document.getElementById(`cvv-hint`);
+class RegistrationForm {
+  constructor() {
+    // Get References to all form elements by their IDs
+    this.nameInput = document.getElementById(`name`);
+    this.jobRoleMenu = document.getElementById(`title`);
+    this.otherJobRole = document.getElementById(`other-job-role`);
+    this.shirtDesign = document.getElementById(`design`);
+    this.shirtColor = document.getElementById(`color`);
+    this.activities  = document.getElementById(`activities-box`);
+    this.activitiesCheckboxes = document.querySelectorAll(`#activities input[type="checkbox"]`);
+    this.payment = document.getElementById(`payment`);
+    this.creditCard = document.getElementById(`credit-card`);
+    this.paypal = document.getElementById(`paypal`);
+    this.bitcoin = document.getElementById(`bitcoin`);
+    this.form = document.querySelector(`form`)
+    this.email = document.getElementById(`email`);
+    this.cardNumber = document.getElementById(`cc-num`);
+    this.zipCode = document.getElementById(`zip`);
+    this.cvv = document.getElementById(`cvv`);
+    this.nameHint = document.getElementById(`name-hint`);
+    this.emailHint = document.getElementById(`email-hint`);
+    this.activitiesHint = document.getElementById(`activities-hint`);
+    this.ccHint = document.getElementById(`cc-hint`);
+    this.zipHint = document.getElementById(`zip-hint`);
+    this.cvvHint = document.getElementById(`cvv-hint`);
+    
+    // Initialize total cost of selected activities
+    this.totalCost = 0;
 
-let totalCost = 0;
-
-//////// "Basic Info" and "T-shirt Info" sections ////////
-nameInput.focus();
-otherJobRole.style.display = `none`;
-shirtColor.disabled = true;
-
-// Displays the "Other Job Role" field only when the user selects the "Other" option in the "Job Role" menu.
-// If the user selects another option, after having selected the "Other" option,
-  // the "Other job role" field is hidden from view once again.
-jobRoleMenu.addEventListener(`change`, (e)=>{
-  const selectedJob = e.target.value;
-  if (selectedJob === `other`){
-    otherJobRole.style.display = `block`;
-  } else {
-    otherJobRole.style.display = `none`;
+    // Call the initialization method
+    this.init();
   }
-});
 
-// Resets the color selector to "Select a color" when selecting a different option in the design selector. 
-function resetColorSelection() {
-  const defaultOption = shirtColor.querySelector(`option[selected]`);
-  defaultOption.textContent = `Select a color`;
-  shirtColor.value = defaultOption.value;
-}
-// Enables the "Color" menu once a theme is selected. 
-// The color options are displayed/hidden based on which theme the user has selected.
-shirtDesign.addEventListener(`change`, (e)=> {
-  const selectedTheme = e.target.value;
-  shirtColor.disabled = false;
-  for (let i=0; i<shirtColor.children.length; i++){
-    const colorOption = shirtColor.children[i];
-    const dataTheme = colorOption.getAttribute(`data-theme`);
-    if (dataTheme === selectedTheme) {
-      colorOption.style.display = `block`;
-    } else {
-      colorOption.style.display = `none`;
+  /*
+   * Initialize the form elements
+  */
+  init() {
+    this.nameInput.focus();
+    this.otherJobRole.style.display = 'none';
+    this.shirtColor.disabled = true;
+
+    this.addEventListeners();
+  }
+
+  /*
+   * Add event listeners for various form elements
+  */
+  addEventListeners() {
+    this.jobRoleMenu.addEventListener('change', this.toggleOtherJobRole.bind(this));
+    this.shirtDesign.addEventListener('change', this.updateShirtColor.bind(this));
+    this.activities.addEventListener('change', this.updateActivitiesCost.bind(this));
+    this.payment.addEventListener('change', this.updatePaymentInfo.bind(this));
+
+    // Validate the name, email, and activities fields
+    this.nameInput.addEventListener('keyup', () => this.validateField(this.nameInput, this.validateName.bind(this), this.nameHint));
+    this.email.addEventListener('keyup', () => this.validateField(this.email, this.validateEmail.bind(this), this.emailHint));
+    this.activities.addEventListener('change', () => this.validateField(this.activities, this.validateActivities.bind(this), this.activitiesHint));
+
+    // Validate credit card fields only if credit card is selected as payment method
+    if (this.payment.value === 'credit-card') {
+      this.cardNumber.addEventListener('keyup', () => this.validateField(this.cardNumber, this.validateCardNumber.bind(this), this.ccHint));
+      this.zipCode.addEventListener('keyup', () => this.validateField(this.zipCode, this.validateZipCode.bind(this), this.zipHint));
+      this.cvv.addEventListener('keyup', () => this.validateField(this.cvv, this.validateCvv.bind(this), this.cvvHint));
     }
-  }
-  resetColorSelection();
-});
 
-//////// "Register for Activities" section ////////
-// Updates the total cost text as the user checks and unchecks activities.
-activities.addEventListener(`change`, (e)=> {
-  const dataCost = +e.target.getAttribute(`data-cost`);
-  let activitiesCost = document.getElementById(`activities-cost`);
-  if (e.target.checked){
-    totalCost += dataCost;
-  } else {
-    totalCost -= dataCost;
+    // Validate the entire form submission
+    this.form.addEventListener('submit', this.validateForm.bind(this));
   }
-  activitiesCost.textContent = `Total: $${totalCost}`;
 
-  // Prevents users from selecting activities that occur at the same time
-  const selectedActivity = e.target;
-  const selectedDateTime = selectedActivity.getAttribute('data-day-and-time');
-  for (let i = 0; i < activitiesCheckboxes.length; i++) {
-    if (activitiesCheckboxes[i] !== selectedActivity) {
-      const dateTime = activitiesCheckboxes[i].getAttribute('data-day-and-time');
-      if (dateTime === selectedDateTime) {
-        if (selectedActivity.checked) {
-          activitiesCheckboxes[i].disabled = true;
-          activitiesCheckboxes[i].parentElement.classList.add('disabled');
-        } else {
-          activitiesCheckboxes[i].disabled = false;
-          activitiesCheckboxes[i].parentElement.classList.remove('disabled');
+  /*
+   * Show or hide the 'other' job role input based on selected job role
+  */
+  toggleOtherJobRole(e) {
+    const selectedJob = e.target.value;
+    this.otherJobRole.style.display = selectedJob === 'other' ? 'block' : 'none';
+  }
+
+  /*
+   * Reset the shirt color selection to default
+  */
+  resetColorSelection() {
+    const defaultOption = this.shirtColor.querySelector('option[selected]');
+    defaultOption.textContent = 'Select a color';
+    this.shirtColor.value = defaultOption.value;
+  }
+
+  /* 
+   * Update the available shirt colors based on selected design
+  */
+  updateShirtColor(e) {
+    const selectedTheme = e.target.value;
+    this.shirtColor.disabled = false;
+
+    // Loop through shirt color options and display based on selected theme
+    for (let i = 0; i < this.shirtColor.children.length; i++) {
+      const colorOption = this.shirtColor.children[i];
+      const dataTheme = colorOption.getAttribute('data-theme');
+      
+      colorOption.style.display = dataTheme === selectedTheme ? 'block' : 'none'
+    }
+
+    // Reset shirt color selection to default
+    this.resetColorSelection();
+  }
+
+  /*
+   * Update the total cost of selected activities
+  */
+  updateActivitiesCost(e) {
+    const dataCost = +e.target.getAttribute('data-cost');
+    let activitiesCost = document.getElementById('activities-cost');
+
+    // Add or subtract cost on checkbox state
+    if (e.target.checked) {
+      this.totalCost += dataCost;
+    } else {
+      this.totalCost -= dataCost;
+    }
+
+    // Update displayed total cost
+    activitiesCost.textContent = `Total: $${this.totalCost}`;
+
+    // Toggle disabled state of conflicting activities
+    this.toggleDisabledActivities(e.target);
+  }
+
+  /*
+   * Disable conflicting activities based on selected one
+  */
+  toggleDisabledActivities(selectedActivity) {
+    const selectedDateTime = selectedActivity.getAttribute('data-day-and-time');
+
+    // Loop through activity checkboxes to enable/disable based on selected activity
+    for (let i = 0; i < this.activitiesCheckboxes.length; i++) {
+      if (this.activitiesCheckboxes[i] !== selectedActivity) {
+        const dateTime = this.activitiesCheckboxes[i].getAttribute('data-day-and-time');
+
+        if (dateTime === selectedDateTime) {
+          this.activitiesCheckboxes[i].disabled = selectedActivity.checked;
+          this.activitiesCheckboxes[i].parentElement.classList.toggle('disabled', selectedActivity.checked);
         }
       }
     }
   }
-});
 
-// Puts the "focus" class on the current activity in focus.
-for (let i=0; i<activitiesCheckboxes.length; i++){
-  activitiesCheckboxes[i].addEventListener(`focus`, ()=> {
-    activitiesCheckboxes[i].parentElement.classList.add(`focus`);
-  });
-  activitiesCheckboxes[i].addEventListener(`blur`, ()=> {
-    activitiesCheckboxes[i].parentElement.classList.remove(`focus`);
-  });
-}
+  /*
+   * Update the visible payment info based on selected payment method
+  */
+  updatePaymentInfo(e) {
+    // Hide all payment options initially
+    this.creditCard.style.display = 'none';
+    this.paypal.style.display = 'none';
+    this.bitcoin.style.display = 'none';
 
-//////// "Payment Info" section ////////
-payment.children[1].setAttribute(`selected`, `selected`);
-paypal.style.display = `none`;
-bitcoin.style.display = `none`;
-
-// Displays only the corresponding div that matches the payment type the user selects.
-payment.addEventListener(`change`, (e)=> {
-  creditCard.style.display = `none`;
-  paypal.style.display = `none`;
-  bitcoin.style.display = `none`;
-  const selectedPayment = document.getElementById(e.target.value);
-  selectedPayment.style.display = `block`;
-});
-
-//////// Form Validation ////////
-// Requires only letters and spaces with the first character being a space for the name field.
-function validateName() {
-  return /^(?!\s)[a-z\s]+$/i.test(nameInput.value);
-}
-
-// Requires proper email format for the email address field.
-function validateEmail() {
-  return /^\w+@\w+\.\w+$/.test(email.value);
-}
-
-// Requires at least one activity to be checked.
-function validateActivities() {
-  for (let i = 0; i < activitiesCheckboxes.length; i++) {
-    if (activitiesCheckboxes[i].checked) {
-      return true;
-    }
+    // Show selected payment info
+    const selectedPayment = document.getElementById(e.target.value);
+    selectedPayment.style.display = 'block';
   }
-  return false;
-}
 
-// Requires 13 - 16 number characters for the card number field.
-function validateCardNumber() {
-  const cardNumberRegex = /^\d{13,16}$/.test(cardNumber.value);
-  return cardNumberRegex;
-}
+  /*
+   * Validate individual input fields
+  */
+  validateField(inputElement, validationFunction, hint) {
+    const isValid = validationFunction();
 
-// Requires 5 number characters for the zip code field.
-function validateZipCode() {
-  const zipCodeRegex = /^\d{5}$/.test(zipCode.value);
-  return zipCodeRegex;
-}
-
-// Requires 3 number characters for the cvv field.
-function validateCvv() {
-  const cvvRegex = /^\d{3}$/.test(cvv.value);
-  return cvvRegex;
-}
-
-// Provides conditional validation styles to show user whether their input matches the required format for the field.
-function validator(inputElement, validationFunction){
-  if (!validationFunction()) {
-    inputElement.parentElement.classList.add(`not-valid`);
-    inputElement.parentElement.classList.remove(`valid`);
-    inputElement.parentElement.lastElementChild.style.display = `block`;
-} else {
-    inputElement.parentElement.classList.add(`valid`);
-    inputElement.parentElement.classList.remove(`not-valid`);
-    inputElement.parentElement.lastElementChild.style.display = `none`;
-}
-}
-
-// Provides conditional error messages.
-function errorMessage(hint, errorText) {
-  hint.textContent = errorText;
-};
-
-// Validates and provides conditional error messages to the the name field in real-time as the user types.
-nameInput.addEventListener(`keyup`, ()=> {
-  validator(nameInput, validateName);
-  if (nameInput.value === ``) {
-    errorMessage(nameHint, `Name field cannot be blank`);
-  } else if (!validateName()) {
-    errorMessage(nameHint, `Name field must be formatted correctly -- Ex: "John Smith"`);
-  }
-});
-
-// Validates and provides conditional error messages to the email address field in real-time as the user types.
-email.addEventListener('keyup', ()=> {
-  validator(email, validateEmail);
-  if (email.value === ``) {
-    errorMessage(emailHint, `Email field cannot be blank`);
-  } else if (!validateEmail()) {
-    errorMessage(emailHint, `Email must be formatted correctly -- Ex: "johnsmith@example.com"`);
-  }
-});
-
-// Validates the activities section in real-time as the user checks/unchecks activities.
-activities.addEventListener('change', ()=> {
-  validator(activities, validateActivities);
-});
-
-// Validates the card numeber field in real-time as the user types.
-if (payment.value === 'credit-card') {
-  cardNumber.addEventListener('keyup', ()=> {
-    validator(cardNumber, validateCardNumber);
-  });
-
-  // Validates the zip code field in real-time as the user types.
-  zipCode.addEventListener('keyup', ()=> {
-    validator(zipCode, validateZipCode);
-  });
-
-  // Validates the cvv field in real-time as the user types.
-  cvv.addEventListener('keyup', ()=> {
-    validator(cvv, validateCvv);
-  });
-}
-
-// Prevents the form from submitting if the input values do not match the regular expressions for the required fields.
-form.addEventListener('submit', (e) => {
-  function validator(inputElement, validationFunction){
-      if (!validationFunction()) {
-        e.preventDefault();
-        inputElement.parentElement.classList.add(`not-valid`);
-        inputElement.parentElement.classList.remove(`valid`);
-        inputElement.parentElement.lastElementChild.style.display = `block`;
+    // Update styles and hints based on validity
+    if (!isValid) {
+      inputElement.parentElement.classList.add('not-valid');
+      inputElement.parentElement.classList.remove('valid');
+      hint.style.display = 'block';
     } else {
-        inputElement.parentElement.classList.add(`valid`);
-        inputElement.parentElement.classList.remove(`not-valid`);
-        inputElement.parentElement.lastElementChild.style.display = `none`;
+      inputElement.parentElement.classList.add('valid');
+      inputElement.parentElement.classList.remove('not-valid');
+      hint.style.display = 'none';
     }
   }
 
-  validator(nameInput, validateName);
-  validator(email, validateEmail);
-  validator(activities, validateActivities);
-
-  if (payment.value === 'credit-card') {
-    validator(cardNumber, validateCardNumber);
-    validator(zipCode, validateZipCode);
-    validator(cvv, validateCvv);
+  /*
+   * Validation Functions for different fields
+  */
+  validateName() {
+    return /^(?!\s)[a-z\s]+$/i.test(this.nameInput.value);
   }
-});
 
+  validateEmail() {
+    return /^\w+@\w+\.\w+$/.test(this.email.value);
+  }
 
+  validateActivities() {
+    return Array.from(this.activitiesCheckboxes).some(checkbox => checkbox.checked); // At least one activity must be selected
+  }
 
+  validateCardNumber() {
+    return /^\d{13,16}$/.test(this.cardNumber.value);
+  }
+
+  validateZipCode() {
+    return /^\d{5}$/.test(this.zipCode.value);
+  }
+
+  validateCvv() {
+    return /^\d{3}$/.test(this.cvv.value);
+  }
+
+  /*
+   * Validate the entire form on submission
+  */
+  validateForm(e) {
+    // Prevent form submission until validation is complete
+    e.preventDefault();
+
+    // Validate fields and show hints as necessary
+    this.validateField(this.nameInput, this.validateName.bind(this), this.nameHint);
+    this.validateField(this.email, this.validateEmail.bind(this), this.emailHint);
+    this.validateField(this.activities, this.validateActivities.bind(this), this.activitiesHint);
+
+    // Validate credit card fields only if credit card is the selected payment method
+    if (this.payment.value === 'credit-card') {
+      this.validateField(this.cardNumber, this.validateCardNumber.bind(this), this.ccHint);
+      this.validateField(this.zipCode, this.validateZipCode.bind(this), this.zipHint);
+      this.validateField(this.cvv, this.validateCvv.bind(this), this.cvvHint);
+    }
+  }
+}
+
+/*
+ * Create a new instance of the RegistrationForm class
+*/
+const registrationForm = new RegistrationForm();
