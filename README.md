@@ -1,6 +1,6 @@
 # Interactive-Form
 
-This project is a dynamic, interactive registration form for a conference or event, built using JavaScript. It allows users to register for various activities, choose shirt designs and sizes, and select a payment method, while providing form validation and real-time feedback to the user.
+This project is a dynamic, interactive registration form for a conference or event, built using TypeScript. It allows users to register for various activities, choose shirt designs and sizes, and select a payment method, while providing form validation and real-time feedback to the user.
 
 ## Features
 
@@ -14,10 +14,10 @@ This project is a dynamic, interactive registration form for a conference or eve
 
 ```bash
 /interactive-form
-├── index.html        # Main HTML file
+├── index.html
 ├── css
-│   ├── normalize.css # Normalize CSS styles
-│   └── style.css     # Main CSS styles
+│   ├── normalize.css
+│   └── style.css
 ├── img
 │   ├── angular.svg   # Angular logo
 │   ├── build.svg     # Tool icon
@@ -29,10 +29,15 @@ This project is a dynamic, interactive registration form for a conference or eve
 │   ├── npm.svg       # npm logo
 │   ├── react.svg     # React logo
 │   └── valid.svg     # Icon for valid form inputs
-├── js
-│   └── script.js    # Main JavaScript file
-├── README.md        # Project documentation
-└── .gitignore
+├── dist              # Compiled JavaScript files
+│   └── script.js
+├── ts
+│   └── script.ts
+├── .gitignore 
+├── package-lock.json 
+├── package.json
+├── tsconfig.json 
+└── README.md 
 ```
 
 ## Form Sections
@@ -63,6 +68,10 @@ This project is a dynamic, interactive registration form for a conference or eve
 2. Navigate to the project directory:
    ```bash
    cd interactive-form
+
+3. Compile the TypeScript files:
+   ```bash
+   tsc
 
 3. Open `index.html` in your preferred browser
 
