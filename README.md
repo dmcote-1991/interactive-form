@@ -30,9 +30,11 @@ This project is a dynamic, interactive registration form for a conference or eve
 │   ├── react.svg     # React logo
 │   └── valid.svg     # Icon for valid form inputs
 ├── dist              # Compiled JavaScript files
-│   └── script.js
+│   ├── app.js
+│   └── RegistrationForm.js
 ├── ts
-│   └── script.ts
+│   ├── app.ts
+│   └── RegistrationForm.ts
 ├── .gitignore 
 ├── package-lock.json 
 ├── package.json
