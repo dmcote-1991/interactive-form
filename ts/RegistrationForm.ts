@@ -1,4 +1,4 @@
-class RegistrationForm {
+export class RegistrationForm {
   totalCost: number;
   nameInput!: HTMLSelectElement;
   jobRoleMenu!: HTMLSelectElement;
