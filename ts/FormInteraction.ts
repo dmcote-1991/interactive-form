@@ -1,4 +1,10 @@
-  export class FormInteraction {
+interface PaymentMethods {
+  creditCard: HTMLElement;
+  paypal: HTMLElement;
+  bitcoin: HTMLElement;
+}
+
+export class FormInteraction {
   jobRoleMenu: HTMLSelectElement;
   otherJobRole: HTMLInputElement;
   shirtDesign: HTMLSelectElement;
@@ -7,9 +13,7 @@
   activitiesCheckboxes: NodeListOf<HTMLInputElement>;
   totalCost: number;
   payment: HTMLSelectElement;
-  creditCard: HTMLElement;
-  paypal: HTMLElement;
-  bitcoin: HTMLElement;
+  paymentMethods: PaymentMethods;
   
   constructor(
     jobRoleMenu: HTMLSelectElement, 
@@ -20,9 +24,7 @@
     activitiesCheckboxes: NodeListOf<HTMLInputElement>,
     totalCost: number,
     payment: HTMLSelectElement,
-    creditCard: HTMLElement,
-    paypal: HTMLElement,
-    bitcoin: HTMLElement
+    paymentMethods: PaymentMethods
   ) {
     this.jobRoleMenu = jobRoleMenu;
     this.otherJobRole = otherJobRole;
@@ -32,9 +34,7 @@
     this.activitiesCheckboxes = activitiesCheckboxes;
     this.totalCost = totalCost;
     this.payment = payment;
-    this.creditCard = creditCard;
-    this.paypal = paypal;
-    this.bitcoin = bitcoin;
+    this.paymentMethods = paymentMethods;
   }
 
   /*
@@ -129,9 +129,9 @@
   */
   updatePaymentInfo(e: Event): void {
     // Hide all payment options initially
-    this.creditCard.style.display = 'none';
-    this.paypal.style.display = 'none';
-    this.bitcoin.style.display = 'none';
+    this.paymentMethods.creditCard.style.display = 'none';
+    this.paymentMethods.paypal.style.display = 'none';
+    this.paymentMethods.bitcoin.style.display = 'none';
 
     // Show selected payment info
     const target = e.target as HTMLSelectElement;
