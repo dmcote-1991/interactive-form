@@ -31,10 +31,12 @@ This project is a dynamic, interactive registration form for a conference or eve
 │   └── valid.svg     # Icon for valid form inputs
 ├── dist              # Compiled JavaScript files
 │   ├── app.js
+│   ├── FormInteraction.js
 │   ├── FormStructure.js
 │   └── RegistrationForm.js
 ├── ts
 │   ├── app.ts
+│   ├── FormInteraction.ts
 │   ├── FormStructure.ts
 │   └── RegistrationForm.ts
 ├── .gitignore 

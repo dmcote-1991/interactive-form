@@ -1,7 +1,7 @@
 import { FormStructure } from "./FormStructure.js";
+import { FormInteraction } from "./FormInteraction.js";
 
 export class RegistrationForm {
-  totalCost: number;
   nameInput!: HTMLInputElement;
   jobRoleMenu!: HTMLSelectElement;
   otherJobRole!: HTMLInputElement;
@@ -9,6 +9,7 @@ export class RegistrationForm {
   shirtColor!: HTMLSelectElement;
   activities!: HTMLElement;
   activitiesCheckboxes!: NodeListOf<HTMLInputElement>;
+  totalCost: number;
   payment!: HTMLSelectElement;
   creditCard!: HTMLElement;
   paypal!: HTMLElement;
@@ -26,10 +27,13 @@ export class RegistrationForm {
   cvvHint!: HTMLElement;
 
   private formStructure: FormStructure;
+  private formInteraction: FormInteraction;
 
-  constructor(formStructure: FormStructure) {
+  constructor(formStructure: FormStructure, formInteraction: FormInteraction) {
     this.totalCost = 0; // Initialize total cost of selected activities
     this.formStructure = formStructure; // Create an instance of FormStructure
+    this.formInteraction = formInteraction; // Create an instance of FormInteraction
+
     this.init(); // Call the initialization method
   }
 
@@ -74,15 +78,7 @@ export class RegistrationForm {
     this.cvvHint = document.getElementById(`cvv-hint`) as HTMLElement;
   }
 
-  /*
-   * Add event listeners for various form elements
-  */
   addEventListeners(): void {
-    this.jobRoleMenu.addEventListener('change', this.toggleOtherJobRole.bind(this));
-    this.shirtDesign.addEventListener('change', this.updateShirtColor.bind(this));
-    this.activities.addEventListener('change', this.updateActivitiesCost.bind(this));
-    this.payment.addEventListener('change', this.updatePaymentInfo.bind(this));
-
     // Validate the name, email, and activities fields
     this.nameInput.addEventListener('keyup', () => this.validateField(this.nameInput, this.validateName.bind(this), this.nameHint));
     this.email.addEventListener('keyup', () => this.validateField(this.email, this.validateEmail.bind(this), this.emailHint));
@@ -97,101 +93,6 @@ export class RegistrationForm {
 
     // Validate the entire form submission
     this.form.addEventListener('submit', this.validateForm.bind(this));
-  }
-
-  /*
-   * Show or hide the 'other' job role input based on selected job role
-  */
-  toggleOtherJobRole(e: Event): void {
-    const selectedJob = (e.target as HTMLSelectElement).value;
-    this.otherJobRole.style.display = selectedJob === 'other' ? 'block' : 'none';
-  }
-
-  /*
-   * Reset the shirt color selection to default
-  */
-  resetColorSelection(): void {
-    const defaultOption = this.shirtColor.querySelector('option[selected]') as HTMLOptionElement;
-    defaultOption.textContent = 'Select a color';
-    this.shirtColor.value = defaultOption.value;
-  }
-
-  /* 
-   * Update the available shirt colors based on selected design
-  */
-  updateShirtColor(e: Event): void {
-    const selectedTheme = (e.target as HTMLSelectElement).value;
-    this.shirtColor.disabled = false;
-
-    // Loop through shirt color options and display based on selected theme
-    for (let i = 0; i < this.shirtColor.children.length; i++) {
-      const colorOption = this.shirtColor.children[i] as HTMLOptionElement;
-      const dataTheme = colorOption.getAttribute('data-theme');
-      
-      colorOption.style.display = dataTheme === selectedTheme ? 'block' : 'none'
-    }
-
-    // Reset shirt color selection to default
-    this.resetColorSelection();
-  }
-
-  /*
-   * Update the total cost of selected activities
-  */
-  updateActivitiesCost(e: Event): void {
-    const target = e.target as HTMLInputElement;
-    const dataCost = +target.getAttribute('data-cost')!;
-    let activitiesCost = document.getElementById('activities-cost')!;
-
-    // Add or subtract cost on checkbox state
-    if (target.checked) {
-      this.totalCost += dataCost;
-    } else {
-      this.totalCost -= dataCost;
-    }
-
-    // Update displayed total cost
-    activitiesCost.textContent = `Total: $${this.totalCost}`;
-
-    // Toggle disabled state of conflicting activities
-    this.toggleDisabledActivities(target);
-  }
-
-  /*
-   * Disable conflicting activities based on selected one
-  */
-  toggleDisabledActivities(selectedActivity: HTMLInputElement): void {
-    const selectedDateTime = selectedActivity.getAttribute('data-day-and-time');
-
-    // Loop through activity checkboxes to enable/disable based on selected activity
-    for (let i = 0; i < this.activitiesCheckboxes.length; i++) {
-      if (this.activitiesCheckboxes[i] !== selectedActivity) {
-        const dateTime = this.activitiesCheckboxes[i].getAttribute('data-day-and-time');
-
-        if (dateTime === selectedDateTime) {
-          this.activitiesCheckboxes[i].disabled = selectedActivity.checked;
-          this.activitiesCheckboxes[i].parentElement?.classList.toggle('disabled', selectedActivity.checked);
-        }
-      }
-    }
-  }
-
-  /*
-   * Update the visible payment info based on selected payment method
-  */
-  updatePaymentInfo(e: Event): void {
-    // Hide all payment options initially
-    this.creditCard.style.display = 'none';
-    this.paypal.style.display = 'none';
-    this.bitcoin.style.display = 'none';
-
-    // Show selected payment info
-    const target = e.target as HTMLSelectElement;
-    const selectedPayment = document.getElementById(target.value);
-
-    if (selectedPayment) {
-      selectedPayment.style.display = 'block';
-    }
   }
 
   /*
