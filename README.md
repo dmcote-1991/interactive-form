@@ -29,16 +29,16 @@ This project is a dynamic, interactive registration form for a conference or eve
 │   ├── npm.svg       # npm logo
 │   ├── react.svg     # React logo
 │   └── valid.svg     # Icon for valid form inputs
-├── dist              # Compiled JavaScript files
+├── dist  # Compiled JavaScript files
 │   ├── app.js
-│   ├── FormInteraction.js
 │   ├── FormStructure.js
-│   └── RegistrationForm.js
+│   ├── FormInteraction.js
+│   └── FormValidation.js
 ├── ts
 │   ├── app.ts
-│   ├── FormInteraction.ts
 │   ├── FormStructure.ts
-│   └── RegistrationForm.ts
+│   ├── FormInteraction.ts
+│   └── FormValidation.ts
 ├── .gitignore 
 ├── package-lock.json 
 ├── package.json
