@@ -33,21 +33,6 @@ export class RegistrationForm {
     this.totalCost = 0; // Initialize total cost of selected activities
     this.formStructure = formStructure; // Create an instance of FormStructure
     this.formInteraction = formInteraction; // Create an instance of FormInteraction
-
-    this.init(); // Call the initialization method
-  }
-
-  /*
-    * Initialize the form functionality.
-  */
-  init(): void {
-    this.formStructure.injectFormHTML();
-    this.getFormElements();
-    this.addEventListeners();
-    
-    this.nameInput.focus();
-    this.otherJobRole.style.display = 'none';
-    this.shirtColor.disabled = true;
   }
 
   /*

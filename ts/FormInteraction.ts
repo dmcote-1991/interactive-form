@@ -35,6 +35,8 @@ export class FormInteraction {
     this.totalCost = totalCost;
     this.payment = payment;
     this.paymentMethods = paymentMethods;
+
+    this.addEventListeners();
   }
 
   /*
