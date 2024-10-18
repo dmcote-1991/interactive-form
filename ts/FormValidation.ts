@@ -1,66 +1,55 @@
-import { FormStructure } from "./FormStructure.js";
-import { FormInteraction } from "./FormInteraction.js";
+export class FormValidation {
+  nameInput: HTMLInputElement;
+  email: HTMLInputElement;
+  activities: HTMLElement;
+  payment: HTMLSelectElement;
+  cardNumber: HTMLInputElement;
+  zipCode: HTMLInputElement;
+  cvv: HTMLInputElement;
+  form: HTMLFormElement;
+  activitiesCheckboxes: NodeListOf<HTMLInputElement>;
 
-export class RegistrationForm {
-  nameInput!: HTMLInputElement;
-  jobRoleMenu!: HTMLSelectElement;
-  otherJobRole!: HTMLInputElement;
-  shirtDesign!: HTMLSelectElement;
-  shirtColor!: HTMLSelectElement;
-  activities!: HTMLElement;
-  activitiesCheckboxes!: NodeListOf<HTMLInputElement>;
-  totalCost: number;
-  payment!: HTMLSelectElement;
-  creditCard!: HTMLElement;
-  paypal!: HTMLElement;
-  bitcoin!: HTMLElement;
-  form!: HTMLFormElement;
-  email!: HTMLInputElement;
-  cardNumber!: HTMLInputElement;
-  zipCode!: HTMLInputElement;
-  cvv!: HTMLInputElement;
-  nameHint!: HTMLElement;
-  emailHint!: HTMLElement;
-  activitiesHint!: HTMLElement;
-  ccHint!: HTMLElement;
-  zipHint!: HTMLElement;
-  cvvHint!: HTMLElement;
+  nameHint: HTMLElement;
+  emailHint: HTMLElement;
+  activitiesHint: HTMLElement;
+  ccHint: HTMLElement;
+  zipHint: HTMLElement;
+  cvvHint: HTMLElement;
 
-  private formStructure: FormStructure;
-  private formInteraction: FormInteraction;
+  constructor(
+    nameInput: HTMLInputElement,
+    email: HTMLInputElement,
+    activities: HTMLElement,
+    payment: HTMLSelectElement,
+    cardNumber: HTMLInputElement,
+    zipCode: HTMLInputElement,
+    cvv: HTMLInputElement,
+    form: HTMLFormElement,
+    activitiesCheckboxes: NodeListOf<HTMLInputElement>,
 
-  constructor(formStructure: FormStructure, formInteraction: FormInteraction) {
-    this.totalCost = 0; // Initialize total cost of selected activities
-    this.formStructure = formStructure; // Create an instance of FormStructure
-    this.formInteraction = formInteraction; // Create an instance of FormInteraction
-  }
+    nameHint: HTMLElement,
+    emailHint: HTMLElement,
+    activitiesHint: HTMLElement,
+    ccHint: HTMLElement,
+    zipHint: HTMLElement,
+    cvvHint: HTMLElement
+  ) {
+    this.nameInput = nameInput;
+    this.email = email;
+    this.activities = activities;
+    this.payment = payment;
+    this.cardNumber = cardNumber;
+    this.zipCode = zipCode;
+    this.cvv = cvv;
+    this.form = form;
+    this.activitiesCheckboxes = activitiesCheckboxes;
 
-  /*
-    * Get References to all form elements by their IDs
-  */
-  getFormElements(): void {
-    this.nameInput = document.getElementById(`name`) as HTMLInputElement;
-    this.jobRoleMenu = document.getElementById(`title`) as HTMLSelectElement;
-    this.otherJobRole = document.getElementById(`other-job-role`) as HTMLInputElement;
-    this.shirtDesign = document.getElementById(`design`) as HTMLSelectElement;
-    this.shirtColor = document.getElementById(`color`) as HTMLSelectElement;
-    this.activities  = document.getElementById(`activities-box`) as HTMLElement;
-    this.activitiesCheckboxes = document.querySelectorAll(`#activities input[type="checkbox"]`) as NodeListOf<HTMLInputElement>;
-    this.payment = document.getElementById(`payment`) as HTMLSelectElement;
-    this.creditCard = document.getElementById(`credit-card`) as HTMLElement;
-    this.paypal = document.getElementById(`paypal`) as HTMLElement;
-    this.bitcoin = document.getElementById(`bitcoin`) as HTMLElement;
-    this.form = document.querySelector(`form`) as HTMLFormElement;
-    this.email = document.getElementById(`email`) as HTMLInputElement;
-    this.cardNumber = document.getElementById(`cc-num`) as HTMLInputElement;
-    this.zipCode = document.getElementById(`zip`) as HTMLInputElement;
-    this.cvv = document.getElementById(`cvv`) as HTMLInputElement;
-    this.nameHint = document.getElementById(`name-hint`) as HTMLElement;
-    this.emailHint = document.getElementById(`email-hint`) as HTMLElement;
-    this.activitiesHint = document.getElementById(`activities-hint`) as HTMLElement;
-    this.ccHint = document.getElementById(`cc-hint`) as HTMLElement;
-    this.zipHint = document.getElementById(`zip-hint`) as HTMLElement;
-    this.cvvHint = document.getElementById(`cvv-hint`) as HTMLElement;
+    this.nameHint = nameHint;
+    this.emailHint = emailHint;
+    this.activitiesHint = activitiesHint;
+    this.ccHint = ccHint;
+    this.zipHint = zipHint;
+    this.cvvHint = cvvHint;
   }
 
   addEventListeners(): void {
@@ -77,7 +66,7 @@ export class RegistrationForm {
     }
 
     // Validate the entire form submission
-    this.form.addEventListener('submit', this.validateForm.bind(this));
+    this.form.addEventListener('submit', this.handleSubmit.bind(this));
   }
 
   /*
