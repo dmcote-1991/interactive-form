@@ -1,18 +1,36 @@
+/**
+ * The FormStructure class is responsible for setting up and rendering the 
+ * HTML structure of a user registration form. The form includes multiple 
+ * sections such as basic user information, T-shirt selection, activity 
+ * registration, and payment details. This class dynamically injects the 
+ * form's HTML into a specified container on the page. It supports features 
+ * like real-time validation hints, payment method selection, and total cost 
+ * calculation for selected activities. The form's layout is designed to 
+ * be user-friendly, guiding users through various registration steps 
+ * while ensuring the required fields are clearly indicated.
+ */
+
 export class FormStructure {
-  containerId: string;
+  private containerId: string;
 
   constructor(containerId: string) {
+    // Store the ID of the container where the form will be rendered
     this.containerId = containerId;
+
+    // Initialize the form by rendering its HTML structure
     this.injectFormHTML();
   }
 
   /**
-   * Inject the form HTML into the DOM
-  */
+   * Injects the HTML structure for the registration form into the specified container.
+   * @returns {void} - No return value; the form's HTML is rendered directly in the container element
+   */
   injectFormHTML(): void {
+    // Find the container element by its ID
     const formContainer = document.getElementById(this.containerId);
 
     if (formContainer) {
+      // Define the form's HTML structure
       formContainer.innerHTML = `
         <form action="index.html" method="post" novalidate>
           <p id="form-hint" class="form-hint">

@@ -1,3 +1,21 @@
+/**
+ * The App class is responsible for managing the entire form application. 
+ * It initializes the form structure, handles user interactions, and validates 
+ * inputs to ensure data integrity. The class listens for the DOMContentLoaded 
+ * event to ensure the HTML is fully loaded before performing any operations.
+ * 
+ * Key functionalities include:
+ * - Creating and injecting the form structure into the specified container.
+ * - Retrieving and managing form elements for user interaction.
+ * - Setting up handlers for form interaction and validation processes.
+ * - Configuring the initial state of the form (e.g., hiding/showing fields, 
+ *   managing input dependencies).
+ * 
+ * This class serves as the main entry point for the application, orchestrating 
+ * the interaction between various components such as FormStructure, 
+ * FormInteraction, and FormValidation.
+ */
+
 import { FormStructure } from "./FormStructure.js";
 import { FormInteraction } from "./FormInteraction.js";
 import { FormValidation } from "./FormValidation.js";
@@ -8,17 +26,21 @@ class App {
   private formValidation!: FormValidation;
 
   constructor() {
-    // Initializes the application
+    // Listen for the DOMContentLoaded event to ensure the HTML is fully loaded before initializing
     document.addEventListener('DOMContentLoaded', () => {
       this.init();
     });
   }
 
+  /**
+   * Initializes the form by creating its structure, retrieving elements, 
+   * setting up interaction and validation handlers, and configuring the initial state.
+   */
   private init(): void {
-    // Initialize FormStructure
+    // Create and inject the form structure into the specified container
     this.formStructure = new FormStructure('form-container');
 
-    // Get references to form elements
+    // Retrieve form elements by their IDs for further manipulation and interaction
     const nameInput = document.getElementById('name') as HTMLInputElement;
     const jobRoleMenu = document.getElementById('title') as HTMLSelectElement;
     const otherJobRole = document.getElementById('other-job-role') as HTMLInputElement;
@@ -26,7 +48,7 @@ class App {
     const shirtColor = document.getElementById('color') as HTMLSelectElement;
     const activities = document.getElementById('activities-box') as HTMLElement;
     const activitiesCheckboxes = document.querySelectorAll('#activities input[type="checkbox"]') as NodeListOf<HTMLInputElement>;
-    const totalCost = 0; // Initialize total cost
+    const totalCost = 0; // Initialize total activity cost
     const payment = document.getElementById('payment') as HTMLSelectElement;
     const creditCard = document.getElementById('credit-card') as HTMLElement;
     const paypal = document.getElementById('paypal') as HTMLElement;
@@ -37,9 +59,10 @@ class App {
     const zipCode = document.getElementById('zip') as HTMLInputElement;
     const cvv = document.getElementById('cvv') as HTMLInputElement;
 
+    // Group payment method elements for easier toggling
     const paymentMethods = { creditCard, paypal, bitcoin };
 
-    // Initialize FormInteraction
+    // Initialize form interaction handlers to manage UI-related functionality
     this.formInteraction = new FormInteraction(
       jobRoleMenu,
       otherJobRole,
@@ -52,7 +75,7 @@ class App {
       paymentMethods
     );
 
-    // Initialize FormValidation
+    // Initialize form validation handlers to validate user inputs
     this.formValidation = new FormValidation(
       nameInput,
       email,
@@ -71,18 +94,29 @@ class App {
       document.getElementById('cvv-hint') as HTMLElement
     );
 
-    // Set up event listeners
+    // Attach event listeners for user interaction and validation
     this.formInteraction.addEventListeners();
     this.formValidation.addEventListeners();
 
+    // Set the initial form state (such as hiding/showing fields, setting focus, etc.)
     this.initializeFormState(otherJobRole, shirtColor)
   }
 
+  /**
+   * Set the initial form state, including hiding/showing fields and setting focus.
+   * @param otherJobRole - The "Other Job Role" input field to manage visibility
+   * @param shirtColor - The shirt color selection dropdown to manage state
+   */
   private initializeFormState(otherJobRole: HTMLInputElement, shirtColor: HTMLSelectElement): void {
-    otherJobRole.style.display = 'none'; // Hide the 'other job role' input
-    shirtColor.disabled = true; // Disable shirt color selection initially
+    // Hide the "Other Job Role" field initially
+    otherJobRole.style.display = 'none';
+
+    // Disable shirt color selection until a design is chosen
+    shirtColor.disabled = true;
+
+    // Automatically focus on the name inut for user convenience
     const nameInput = document.getElementById('name') as HTMLInputElement;
-    nameInput.focus(); // Set focus to the name input field
+    nameInput.focus(); 
   }
 }
 

@@ -1,3 +1,13 @@
+/**
+ * Manages form interactions for a registration form, including event handling, 
+ * dynamic updates to form elements, and payment information display.
+ * This class provides methods to control the visibility of form sections, update the total cost of activities,
+ * handle payment options, and manage other form behaviors.
+ * 
+ * @interface PaymentMethods - Interface for the available payment method elements.
+ * @class FormInteraction - Represents the form interaction logic and its associated properties.
+ */
+
 interface PaymentMethods {
   creditCard: HTMLElement;
   paypal: HTMLElement;
@@ -26,6 +36,7 @@ export class FormInteraction {
     payment: HTMLSelectElement,
     paymentMethods: PaymentMethods
   ) {
+    // Initialize form interaction properties
     this.jobRoleMenu = jobRoleMenu;
     this.otherJobRole = otherJobRole;
     this.shirtDesign = shirtDesign;
@@ -37,9 +48,9 @@ export class FormInteraction {
     this.paymentMethods = paymentMethods;
   }
 
-  /*
-   * Add event listeners for various form elements
-  */
+  /**
+   * Attach event listeners to various form elements to handle user actions
+   */
   addEventListeners(): void {
     this.jobRoleMenu.addEventListener('change', this.toggleOtherJobRole.bind(this));
     this.shirtDesign.addEventListener('change', this.updateShirtColor.bind(this));
@@ -47,31 +58,33 @@ export class FormInteraction {
     this.payment.addEventListener('change', this.updatePaymentInfo.bind(this));
   }
 
-  /*
-   * Show or hide the 'other' job role input based on selected job role
-  */
+  /**
+   * Display or hide the "Other Job Role" field based on the selected job role.
+   * @param e - The change event from the job role dropdown
+   */
   toggleOtherJobRole(e: Event): void {
     const selectedJob = (e.target as HTMLSelectElement).value;
     this.otherJobRole.style.display = selectedJob === 'other' ? 'block' : 'none';
   }
 
-  /*
-   * Reset the shirt color selection to default
-  */
+  /**
+   * Reset the shirt color selection to the default "Select a color" state.
+   */
   resetColorSelection(): void {
     const defaultOption = this.shirtColor.querySelector('option[selected]') as HTMLOptionElement;
     defaultOption.textContent = 'Select a color';
     this.shirtColor.value = defaultOption.value;
   }
 
-  /* 
-   * Update the available shirt colors based on selected design
-  */
+  /**
+   * Enable shirt color options that match the selected shirt dessign
+   * @param e - The change event from the shirt design dropdown
+   */
   updateShirtColor(e: Event): void {
     const selectedTheme = (e.target as HTMLSelectElement).value;
     this.shirtColor.disabled = false;
 
-    // Loop through shirt color options and display based on selected theme
+    // Show or hide color options based on the selected theme
     for (let i = 0; i < this.shirtColor.children.length; i++) {
       const colorOption = this.shirtColor.children[i] as HTMLOptionElement;
       const dataTheme = colorOption.getAttribute('data-theme');
@@ -79,39 +92,41 @@ export class FormInteraction {
       colorOption.style.display = dataTheme === selectedTheme ? 'block' : 'none'
     }
 
-    // Reset shirt color selection to default
+    // Reset the color selection to the default state
     this.resetColorSelection();
   }
 
-  /*
-   * Update the total cost of selected activities
-  */
+  /**
+   * Update the total cost of selected activities and mangage conflicting schedules
+   * @param e - The change event from the activities selection
+   */
   updateActivitiesCost(e: Event): void {
     const target = e.target as HTMLInputElement;
     const dataCost = +target.getAttribute('data-cost')!;
     let activitiesCost = document.getElementById('activities-cost')!;
 
-    // Add or subtract cost on checkbox state
+    // Add or subtract the cost on the checkbox state
     if (target.checked) {
       this.totalCost += dataCost;
     } else {
       this.totalCost -= dataCost;
     }
 
-    // Update displayed total cost
+    // Display the updated total cost
     activitiesCost.textContent = `Total: $${this.totalCost}`;
 
-    // Toggle disabled state of conflicting activities
+    // Disable or enable conflicting activities
     this.toggleDisabledActivities(target);
   }
 
-  /*
-   * Disable conflicting activities based on selected one
-  */
+  /**
+   * Disable or enable conflicting activities based on the selected activity
+   * @param selectedActivity - The activity checkbox that was selected or deselected
+   */
   toggleDisabledActivities(selectedActivity: HTMLInputElement): void {
     const selectedDateTime = selectedActivity.getAttribute('data-day-and-time');
 
-    // Loop through activity checkboxes to enable/disable based on selected activity
+    // Loop through other activities to disable those with conflicting schedules
     for (let i = 0; i < this.activitiesCheckboxes.length; i++) {
       if (this.activitiesCheckboxes[i] !== selectedActivity) {
         const dateTime = this.activitiesCheckboxes[i].getAttribute('data-day-and-time');
@@ -124,16 +139,17 @@ export class FormInteraction {
     }
   }
 
-  /*
-   * Update the visible payment info based on selected payment method
-  */
+  /**
+   * Show the appropriate payment method details based on the selected option
+   * @param e - The change event from the payment method dropdown
+   */
   updatePaymentInfo(e: Event): void {
     // Hide all payment options initially
     this.paymentMethods.creditCard.style.display = 'none';
     this.paymentMethods.paypal.style.display = 'none';
     this.paymentMethods.bitcoin.style.display = 'none';
 
-    // Show selected payment info
+    // Show the selected payment method details
     const target = e.target as HTMLSelectElement;
     const selectedPayment = document.getElementById(target.value);
 
