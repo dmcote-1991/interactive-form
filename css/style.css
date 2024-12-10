@@ -22,6 +22,7 @@ button {
 
 body {
   background: rgba(218, 174, 81, 0.1);
+  color: rgb(33, 33, 33);
 }
 
 header {
@@ -45,10 +46,21 @@ h1 {
 
 p {
 	line-height: 1.5;
+  color: #333;
 }
 
 a {
   text-decoration: none;
+  color: #1a73e8;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+a:focus {
+  text-decoration: underline;
+  color: #d93025;
 }
 
 .container {
@@ -78,6 +90,7 @@ fieldset {
 }
 
 .sr-only {
+  /* Hides elements visually but keeps them accessible for screen readers */
   position: absolute;
   width: 1px;
   height: 1px;
@@ -142,6 +155,8 @@ input {
 input:focus {
   background: rgba(255, 255, 255, 1);
   border-color:  rgb(9, 73, 250);
+  box-shadow: 0 0 3px rgba(9, 73, 250, 0.7);
+  outline: 3px solid rgb(9, 73, 250);
 }
 
 input:-webkit-autofill {
@@ -160,7 +175,6 @@ input[type="checkbox"]:disabled {
 }
 
 select {
-	-webkit-appearance: none;
 	-webkit-border-radius: 0px;
 	font-size: 1em;
   font-weight: 500;
@@ -183,6 +197,8 @@ select:focus {
   background: url(../img/caret.png) calc(100% - 7px) 50% no-repeat rgba(255, 255, 255, 1) !important;
   background-size: 12px auto !important;
   border-color:  rgb(9, 73, 250);
+  box-shadow: 0 0 3px rgba(9, 73, 250, 0.7);
+  outline: 3px solid rgb(9, 73, 250);
 }
 
 select:disabled {
@@ -221,6 +237,12 @@ button:hover {
   border: 1px solid rgba(213, 51, 105, 0.3);
   box-shadow: 1px 1px 25px rgba(213, 51, 105, 0.5) inset, 3px 3px 10px rgba(50, 50, 50, 0.3);
 }
+
+button:focus {
+  outline: 3px solid rgb(9, 73, 250);
+}
+
+input
 
 .hint {
   display: none;
@@ -284,6 +306,7 @@ button:hover {
 .activities.not-valid::after {
   top: 5px;
 }
+
 /* ================================= 
   Basic info and t shirt styles
 ==================================== */
@@ -294,12 +317,54 @@ button:hover {
   justify-content: space-between;
 }
 
-
 .basic-info {
   display: flex;
   flex-flow: column;
   justify-content: space-between;
+  width: 45%;
 }
+
+.basic-info p {
+  font-size: 1.2rem;
+  font-weight: bolder;
+}
+
+.basic-info label {
+  font-size: 1.1rem;
+}
+
+.basic-info input[type="text"],
+.basic-info select {
+  width: 100%;
+}
+
+input[type="text"]:focus,
+select:focus {
+  border-color: rgb(9, 73, 250);
+  box-shadow: 0 0 3px rgba(9, 73, 250, 0.7);
+}
+
+.basic-info select {
+  height: 2.4em;
+  margin: 3px 0;
+}
+
+.basic-info .shirt-box {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-between;
+}
+
+.basic-info .shirt-box label {
+  display: block;
+  font-weight: bolder;
+  margin: 5px;
+}
+
+.basic-info .shirt-box .input-box {
+  width: 45%;
+}
+
 
 .shirt-div-box {
   display: flex;
@@ -474,6 +539,23 @@ button:hover {
 .bitcoin {
   transition: all 0.3s ease-out;
 }
+
+/* ================================= 
+  Footer
+==================================== */
+
+footer {
+  color: rgb(255, 255, 255);
+  background: rgb(0, 0, 0);
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 20px, 0;
+}
+
+footer p {
+  margin: 0;
+}
+
 
 /* ================================= 
   Helper class styles
