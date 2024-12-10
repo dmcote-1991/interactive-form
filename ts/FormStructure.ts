@@ -33,6 +33,7 @@ export class FormStructure {
       // Define the form's HTML structure
       formContainer.innerHTML = `
         <form action="index.html" method="post" novalidate>
+          <h2 id="form-title" class="sr-only">Registration Form for Full Stack Conference</h2>
           <p id="form-hint" class="form-hint">
             <span class="asterisk">*</span> - required field
           </p>
@@ -47,8 +48,10 @@ export class FormStructure {
                   id="name"
                   name="user-name"
                   class="error-border"
+                  aria-describedby="name-hint"
+                  required
                 />
-                <span id="name-hint" class="name-hint hint">
+                <span id="name-hint" class="name-hint hint" role="alert">
                   Name field cannot be blank
                 </span>
               </label>
@@ -61,14 +64,16 @@ export class FormStructure {
                   id="email"
                   name="user-email"
                   class="error-border"
+                  aria-describedby="email-hint"
+                  required
                 />
-                <span id="email-hint" class="email-hint hint">
+                <span id="email-hint" class="email-hint hint" role="alert">
                   Email address must be formatted correctly
                 </span>
               </label>
 
               <label for="title">Job Role</label>
-              <select id="title" name="user-title">
+              <select id="title" name="user-title" aria-required="true">
                 <option hidden>Select Job Role</option>
                 <option value="full-stack js developer">Full Stack JavaScript Developer</option>
                 <option value="front-end developer">Front End Developer</option>
@@ -84,6 +89,7 @@ export class FormStructure {
                 id="other-job-role"
                 class="other-job-role"
                 placeholder="Other job role?"
+                aria-label="Other job role"
               />
             </fieldset>
 
@@ -92,7 +98,7 @@ export class FormStructure {
               <div class="shirt-div-box">
                 <div id="shirt-sizes" class="shirt-sizes">
                   <label for="size">Size:</label>
-                  <select id="size" name="user-size">
+                  <select id="size" name="user-size" aria-label="T-shirt size">
                     <option value="small">S</option>
                     <option value="medium" selected>M</option>
                     <option value="large">L</option>
@@ -103,7 +109,7 @@ export class FormStructure {
 
                 <div id="shirt-designs" class="shirt-designs">
                   <label for="design">Design:</label>
-                  <select id="design" name="user-design">
+                  <select id="design" name="user-design" aria-label="T-shirt design">
                     <option hidden>Select Theme</option>
                     <option value="js puns">Theme - JS Puns</option>
                     <option value="heart js">Theme - I &#9829; JS</option>
@@ -112,7 +118,7 @@ export class FormStructure {
 
                 <div id="shirt-colors" class="shirt-colors">
                   <label for="color">Color:</label>
-                  <select id="color">
+                  <select id="color" aria-label="Shirt color selection">
                     <option selected hidden>Select a design theme above</option>
                     <option data-theme="js puns" value="cornflowerblue">
                       Cornflower Blue (JS Puns shirt only)
@@ -142,12 +148,12 @@ export class FormStructure {
             <legend>
               Register for Activities <span class="asterisk">*</span>
             </legend>
-            <div id="activities-box" class="activities-box error-border">
+            <div id="activities-box" class="activities-box error-border" aria-labelledby="activities-hint">
               <label>
                 <input type="checkbox" name="all" data-cost="200" />
                 <span>Main Conference</span>
                 <span class="activity-cost">$200</span>
-                <img class="activity-img js-img" src="img/js.svg" alt="" />
+                <img class="activity-img js-img" src="img/js.svg" alt="JavaScript logo" />
               </label>
               <label>
                 <input
@@ -159,7 +165,7 @@ export class FormStructure {
                 <span>JavaScript Libraries Workshop</span>
                 <span>Tuesday 9am-12pm</span>
                 <span class="activity-cost">$100</span>
-                <img class="activity-img react-img" src="img/react.svg" alt="" />
+                <img class="activity-img react-img" src="img/react.svg" alt="React logo" />
               </label>
               <label>
                 <input
@@ -171,7 +177,7 @@ export class FormStructure {
                 <span>Node.js Workshop</span>
                 <span>Tuesday 1pm-4pm</span>
                 <span class="activity-cost">$100</span>
-                <img class="activity-img node-img" src="img/node.svg" alt="" />
+                <img class="activity-img node-img" src="img/node.svg" alt="Node.js logo" />
               </label>
               <label>
                 <input
@@ -186,7 +192,7 @@ export class FormStructure {
                 <img
                   class="activity-img angular-img"
                   src="img/angular.svg"
-                  alt=""
+                  alt="Angular logo"
                 />
               </label>
               <label>
@@ -199,7 +205,7 @@ export class FormStructure {
                 <span>Build tools Workshop</span>
                 <span>Tuesday 1pm-4pm</span>
                 <span class="activity-cost">$100</span>
-                <img class="activity-img build-img" src="img/build.svg" alt="" />
+                <img class="activity-img build-img" src="img/build.svg" alt="Build tools logo" />
               </label>
               <label>
                 <input
@@ -211,7 +217,7 @@ export class FormStructure {
                 <span>npm Workshop</span>
                 <span>Wednesday 9am-12pm</span>
                 <span class="activity-cost">$100</span>
-                <img class="activity-img npm-img" src="img/npm.svg" alt="" />
+                <img class="activity-img npm-img" src="img/npm.svg" alt="npm logo" />
               </label>
               <label>
                 <input
@@ -226,33 +232,42 @@ export class FormStructure {
                 <img
                   class="activity-img express-img"
                   src="img/express.svg"
-                  alt=""
+                  alt="Express logo"
                 />
               </label>
             </div>
-            <p id="activities-cost" class="activities-cost">Total: $0</p>
-            <p id="activities-hint" class="hint">Please select at least one activity.</p>
+
+            <p id="activities-cost" class="activities-cost" aria-live="polite">
+              Total: $0
+            </p>
+            <p id="activities-hint" class="hint" role="alert">
+              Please select at least one activity.
+            </p>
           </fieldset>
 
-          <fieldset class="payment-method">
-            <legend>Payment Info</legend>
+          <fieldset class="payment-method" aria-labelledby="payment-method-label">
+            <legend id="payment-method-label">Payment Info</legend>
 
             <label for="payment">I'm going to pay with:</label>
-            <select id="payment">
+            <select id="payment" aria-labelledby="payment">
               <option value="credit-card">Credit Card</option>
               <option value="paypal">PayPal</option>
               <option value="bitcoin">Bitcoin</option>
             </select>
 
-            <div id="credit-card">
+            <div id="credit-card" role="group" aria-labelledby="credit-card-label">
+              <legend id="credit-card-label">Credit Card Information</legend>
+
               <label for="cc-num">Card Number:</label>
               <input
                 type="text"
                 id="cc-num"
                 name="user-cc-num"
                 placeholder="enter a number between 13 and 16 digits"
+                aria-describedby="cc-hint"
+                required
               />
-              <span id="cc-hint" class="cc-hint hint">
+              <span id="cc-hint" class="cc-hint hint" role="alert">
                 Please enter a number between 13 and 16 digits.
               </span>
 
@@ -262,14 +277,25 @@ export class FormStructure {
                 id="zip"
                 name="user-zip"
                 placeholder="enter 5 digit ZIP code"
+                aria-describedby="zip-hint"
+                required
               />
-              <span id="zip-hint" class="zip-hint hint">
+              <span id="zip-hint" class="zip-hint hint" role="alert">
                 Enter a 5 digit ZIP code.
               </span>
 
               <label for="cvv">CVV:</label>
-              <input type="text" id="cvv" name="user-cvv" placeholder="enter 3 digit CVV" />
-              <span id="cvv-hint" class="cvv-hint hint">Enter a 3 digit CVV number.</span>
+              <input 
+                type="text" 
+                id="cvv" 
+                name="user-cvv" 
+                placeholder="enter 3 digit CVV" 
+                aria-describedby="cvv-hint"
+                required
+              />
+              <span id="cvv-hint" class="cvv-hint hint" role="alert">
+                Enter a 3 digit CVV number.
+              </span>
             </div>
 
             <div id="paypal">
@@ -281,7 +307,7 @@ export class FormStructure {
             </div>
           </fieldset>
 
-          <button type="submit" id="submit">Submit</button>
+          <button type="submit" id="submit" aria-label="Submit the registration form">Submit</button>
         </form>
       `;
     }
