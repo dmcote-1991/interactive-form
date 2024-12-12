@@ -309,6 +309,17 @@ export class FormStructure {
 
           <button type="submit" id="submit" aria-label="Submit the registration form">Submit</button>
         </form>
+
+        <footer id="form-footer" class="form-footer">
+          <p>&copy; 2024 Full Stack Conference. All rights reserved.</p>
+          <nav>
+            <ul>
+              <li><a href="#privacy-policy" aria-label="Privacy Policy">Privacy Policy</a></li>
+              <li><a href="#terms-of-service" aria-label="Terms of Service">Terms of Service</a></li>
+              <li><a href="#contact-us" aria-label="Contact Us">Contact Us</a></li>
+            </ul>
+          </nav>
+        </footer>
       `;
     }
   }
