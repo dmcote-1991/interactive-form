@@ -345,7 +345,7 @@ select:focus {
 }
 
 .basic-info select {
-  height: 2.4em;
+  height: 3.2em;
   margin: 3px 0;
 }
 
@@ -373,12 +373,12 @@ select:focus {
 }
 
 .shirt-sizes {
-  width: 25%;
+  width: 31%;
   min-width: 75px;
 }
 
 .shirt-designs {
-  width: 70%;
+  width: 66%;
   min-width: 210px;
 }
 
