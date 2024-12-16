@@ -56,6 +56,18 @@ export class FormInteraction {
     this.shirtDesign.addEventListener('change', this.updateShirtColor.bind(this));
     this.activities.addEventListener('change', this.updateActivitiesCost.bind(this));
     this.payment.addEventListener('change', this.updatePaymentInfo.bind(this));
+
+    // Prevent form submission when Enter is pressed while a checkbox is focused
+    this.activitiesCheckboxes.forEach(checkbox => {
+      checkbox.addEventListener('keydown', (e: KeyboardEvent) => {
+        if (e.key === 'Enter') {
+          checkbox.checked = !checkbox.checked; // Toggle checkbox state
+          this.updateActivitiesCost(e); // Updates the total price
+          this.toggleDisabledActivities(checkbox); // Disables any activities where date/time conflicts
+          e.preventDefault(); // Prevent the form submission
+        }
+      });
+    });
   }
 
   /**
