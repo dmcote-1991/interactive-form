@@ -3,17 +3,6 @@
  * It initializes the form structure, handles user interactions, and validates 
  * inputs to ensure data integrity. The class listens for the DOMContentLoaded 
  * event to ensure the HTML is fully loaded before performing any operations.
- * 
- * Key functionalities include:
- * - Creating and injecting the form structure into the specified container.
- * - Retrieving and managing form elements for user interaction.
- * - Setting up handlers for form interaction and validation processes.
- * - Configuring the initial state of the form (e.g., hiding/showing fields, 
- *   managing input dependencies).
- * 
- * This class serves as the main entry point for the application, orchestrating 
- * the interaction between various components such as FormStructure, 
- * FormInteraction, and FormValidation.
  */
 
 import { FormStructure } from "./FormStructure.js";
@@ -99,24 +88,7 @@ class App {
     this.formValidation.addEventListeners();
 
     // Set the initial form state (such as hiding/showing fields, setting focus, etc.)
-    this.initializeFormState(otherJobRole, shirtColor)
-  }
-
-  /**
-   * Set the initial form state, including hiding/showing fields and setting focus.
-   * @param otherJobRole - The "Other Job Role" input field to manage visibility
-   * @param shirtColor - The shirt color selection dropdown to manage state
-   */
-  private initializeFormState(otherJobRole: HTMLInputElement, shirtColor: HTMLSelectElement): void {
-    // Hide the "Other Job Role" field initially
-    otherJobRole.style.display = 'none';
-
-    // Disable shirt color selection until a design is chosen
-    shirtColor.disabled = true;
-
-    // Automatically focus on the name inut for user convenience
-    const nameInput = document.getElementById('name') as HTMLInputElement;
-    nameInput.focus(); 
+    this.formInteraction.initializeFormState(otherJobRole, shirtColor, nameInput);
   }
 }
 

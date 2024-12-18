@@ -1,18 +1,8 @@
 /**
- * Manages form interactions for a registration form, including event handling, 
- * dynamic updates to form elements, and payment information display.
- * This class provides methods to control the visibility of form sections, update the total cost of activities,
- * handle payment options, and manage other form behaviors.
- * 
- * @interface PaymentMethods - Interface for the available payment method elements.
- * @class FormInteraction - Represents the form interaction logic and its associated properties.
+ * The FormInteraction class handles all user interaction-related functionality. 
+ * It includes methods for enabling/disabling fields, showing/hiding elements, 
+ * and managing dependencies between form inputs.
  */
-
-interface PaymentMethods {
-  creditCard: HTMLElement;
-  paypal: HTMLElement;
-  bitcoin: HTMLElement;
-}
 
 export class FormInteraction {
   jobRoleMenu: HTMLSelectElement;
@@ -23,7 +13,7 @@ export class FormInteraction {
   activitiesCheckboxes: NodeListOf<HTMLInputElement>;
   totalCost: number;
   payment: HTMLSelectElement;
-  paymentMethods: PaymentMethods;
+  paymentMethods: { [key: string]: HTMLElement };
   
   constructor(
     jobRoleMenu: HTMLSelectElement, 
@@ -34,7 +24,7 @@ export class FormInteraction {
     activitiesCheckboxes: NodeListOf<HTMLInputElement>,
     totalCost: number,
     payment: HTMLSelectElement,
-    paymentMethods: PaymentMethods
+    paymentMethods: { [key: string]: HTMLElement }
   ) {
     // Initialize form interaction properties
     this.jobRoleMenu = jobRoleMenu;
@@ -46,6 +36,26 @@ export class FormInteraction {
     this.totalCost = totalCost;
     this.payment = payment;
     this.paymentMethods = paymentMethods;
+  }
+
+  /**
+   * Set the initial form state, including hiding/showing fields and setting focus.
+   * @param otherJobRole - The "Other Job Role" input field to manage visibility
+   * @param shirtColor - The shirt color selection dropdown to manage state
+   */
+  public initializeFormState(
+    otherJobRole: HTMLInputElement, 
+    shirtColor: HTMLSelectElement,
+    nameInput: HTMLInputElement
+  ): void {
+    // Hide the "Other Job Role" field initially
+    otherJobRole.style.display = 'none';
+
+    // Disable shirt color selection until a design is chosen
+    shirtColor.disabled = true;
+
+    // Automatically focus on the name inut for user convenience
+    nameInput.focus(); 
   }
 
   /**
