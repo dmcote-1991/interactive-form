@@ -39,9 +39,7 @@ export class FormInteraction {
   }
 
   /**
-   * Set the initial form state, including hiding/showing fields and setting focus.
-   * @param otherJobRole - The "Other Job Role" input field to manage visibility
-   * @param shirtColor - The shirt color selection dropdown to manage state
+   * Initialize the form state, including the payment info section.
    */
   public initializeFormState(
     otherJobRole: HTMLInputElement, 
@@ -54,8 +52,11 @@ export class FormInteraction {
     // Disable shirt color selection until a design is chosen
     shirtColor.disabled = true;
 
-    // Automatically focus on the name inut for user convenience
+    // Automatically focus on the name input for user convenience
     nameInput.focus(); 
+
+    // Initialize payment info visibility
+    this.updatePaymentInfo();
   }
 
   /**
@@ -163,16 +164,17 @@ export class FormInteraction {
 
   /**
    * Show the appropriate payment method details based on the selected option
+   * and hide others during initialization.
    * @param e - The change event from the payment method dropdown
    */
-  updatePaymentInfo(e: Event): void {
+  updatePaymentInfo(e?: Event): void {
     // Hide all payment options initially
     this.paymentMethods.creditCard.style.display = 'none';
     this.paymentMethods.paypal.style.display = 'none';
     this.paymentMethods.bitcoin.style.display = 'none';
 
-    // Show the selected payment method details
-    const target = e.target as HTMLSelectElement;
+    // Determine the selected payment method
+    const target = e ? (e.target as HTMLSelectElement) : this.payment;
     const selectedPayment = document.getElementById(target.value);
 
     if (selectedPayment) {
